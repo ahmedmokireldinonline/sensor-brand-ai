@@ -1,0 +1,3 @@
+-- Phase 2 foundation placeholder.
+-- The first migration will be added only after the target Supabase project is confirmed.
+-- No production tables are created by this placeholder.
