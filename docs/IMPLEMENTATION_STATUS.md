@@ -3,6 +3,8 @@
 ## Delivered
 
 - Private GitHub repository and Next.js TypeScript foundation.
+- Product landing page with clear prototype and sign-in entry points.
+- Supabase email sign-in/signup page and Auth callback route.
 - Responsive bilingual shell with English/Arabic toggle and RTL support.
 - Dashboard overview UI.
 - Workspace management UI and creation form placeholder.
