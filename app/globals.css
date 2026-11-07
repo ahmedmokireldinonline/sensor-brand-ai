@@ -124,7 +124,7 @@ a { color: inherit; text-decoration: none; }
 .workspace-form input::placeholder, .workspace-form textarea::placeholder { color: #a7b3af; }
 .workspace-form small { color: var(--muted); font-size: 10px; }
 .form-field-wide { grid-column: 1 / -1; }
-.form-actions { display: flex; gap: 7px; grid-column: 1 / -1; justify-content: end; }
+.form-actions { display: flex; gap: 7px; grid-column: 1 / -1; justify-content: flex-end; }
 .form-success { align-items: center; background: var(--signal-soft); border-radius: 9px; color: var(--signal-dark); display: flex; gap: 12px; margin-top: 23px; padding: 17px; }
 .form-success > span { align-items: center; background: var(--signal); border-radius: 50%; color: white; display: inline-flex; font-size: 12px; height: 25px; justify-content: center; width: 25px; }
 .form-success strong { font-size: 12px; }
