@@ -318,3 +318,43 @@ button, a, select, input, textarea { min-height: 36px; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .001ms !important; }
 }
+
+/* Global UX hardening: predictable focus, touch targets, and mobile-first overflow. */
+:focus-visible { outline: 3px solid rgba(8,127,115,.38); outline-offset: 3px; }
+.sr-only { border: 0; clip: rect(0 0 0 0); clip-path: inset(50%); height: 1px; margin: -1px; overflow: hidden; padding: 0; position: absolute; white-space: nowrap; width: 1px; }
+html { scroll-behavior: smooth; }
+body { overflow-x: hidden; }
+button, a, select, input, textarea { min-height: 36px; }
+.app-shell[dir="rtl"] .sidebar { text-align: right; }
+.app-shell[dir="rtl"] .nav-link.active { box-shadow: inset -2px 0 var(--signal); }
+.app-shell[dir="rtl"] .workspace-summary > div:not(.summary-help), .app-shell[dir="rtl"] .source-summary > div:not(.source-summary-note) { border-right: 0; border-left: 1px solid var(--line); }
+.app-shell[dir="rtl"] .workspace-summary > div:last-of-type, .app-shell[dir="rtl"] .source-summary > div:last-of-type { border-left: 0; }
+.topbar-action-link { align-items: center; background: #eef5f2; border: 1px solid #d9e7e1; border-radius: 8px; color: #55716a; display: inline-flex; font-size: 10px; font-weight: 800; gap: 4px; min-height: 34px; padding: 7px 10px; transition: background .16s, border-color .16s, transform .16s; }
+.topbar-action-link:hover { background: #e3f2ed; border-color: #b7d9cd; transform: translateY(-1px); }
+.topbar-action-primary { background: var(--signal); border-color: var(--signal); color: white; }
+.topbar-action-primary:hover { background: var(--signal-dark); border-color: var(--signal-dark); }
+@media (max-width: 720px) {
+  .sidebar { width: min(320px, 88vw); padding: 20px 16px 18px; }
+  .sidebar-brand-row { align-items: center; }
+  .sidebar .primary-nav { display: block; }
+  .sidebar .workspace-switcher { display: block; }
+  .sidebar .sidebar-bottom { margin-top: auto; }
+  .mobile-menu-button { align-items: center; border: 1px solid #d7e3de; border-radius: 9px; display: inline-flex; height: 40px; justify-content: center; width: 40px; }
+  .topbar-icon-button { align-items: center; display: inline-flex; height: 40px; justify-content: center; width: 40px; }
+  .topbar-actions { gap: 4px; }
+  .topbar-breadcrumb { min-width: 0; overflow: hidden; }
+  .topbar-breadcrumb strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .page-header h1 { max-width: 100%; }
+  .page-intro { font-size: 13px; }
+  .panel-heading { align-items: flex-start; flex-wrap: wrap; }
+  .metric-card-modern { min-height: 142px; }
+  .workspace-summary, .source-summary { padding: 17px; }
+  .workspace-summary > div:not(.summary-help), .source-summary > div:not(.source-summary-note) { border-bottom: 1px solid var(--line); border-inline-end: 0; padding-bottom: 10px; }
+  .workspace-summary > div:nth-child(3), .source-summary > div:nth-child(3) { border-bottom: 0; }
+  .form-actions { flex-wrap: wrap; }
+  .form-actions .button { min-width: 130px; }
+}
+@media (max-width: 880px) { .topbar-action-link { display: none; } }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .001ms !important; }
+}

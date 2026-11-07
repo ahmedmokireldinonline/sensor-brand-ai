@@ -3,6 +3,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { LanguageNormalizer } from "@/components/language-normalizer";
+import { translateText } from "@/lib/translations";
 
 type Language = "en" | "ar";
 type LanguageContextValue = { language: Language; arabic: boolean; setLanguage: (language: Language) => void; t: (en: string, ar: string) => string };
@@ -17,8 +19,8 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     else if (window.navigator.language.toLowerCase().startsWith("ar")) setLanguage("ar");
   }, []);
   useEffect(() => { document.documentElement.lang = language; document.documentElement.dir = language === "ar" ? "rtl" : "ltr"; window.localStorage.setItem("sensor-language", language); }, [language]);
-  const value = useMemo<LanguageContextValue>(() => ({ language, arabic: language === "ar", setLanguage, t: (en, ar) => language === "ar" ? ar : en }), [language]);
-  return <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>;
+  const value = useMemo<LanguageContextValue>(() => ({ language, arabic: language === "ar", setLanguage, t: (en, ar) => translateText(en, language, ar) }), [language]);
+  return <LanguageContext.Provider value={value}><LanguageNormalizer language={language} />{children}</LanguageContext.Provider>;
 }
 
 const navigation = [
@@ -47,6 +49,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <nav id="primary-navigation" className="primary-nav" aria-label={t("Primary navigation", "التنقل الرئيسي")}><span className="section-label">{t("WORKSPACE", "مساحة العمل")}</span>{renderNav("Workspace")}<span className="section-label nav-section-spaced">{t("OPERATIONS", "التشغيل")}</span>{renderNav("Operations")}</nav>
       <div className="sidebar-bottom"><div className="sidebar-note"><span className="note-icon">✦</span><div><strong>{t("Ready to connect", "جاهز للربط")}</strong><p>{t("Add a source to start listening.", "أضف مصدراً لبدء الاستماع.")}</p></div></div><div className="language-switcher" role="group" aria-label={t("Language selector", "اختيار اللغة")}><button aria-pressed={language === "en"} className={language === "en" ? "language-option active" : "language-option"} onClick={() => setLanguage("en")} type="button">EN<span className="sr-only"> English</span></button><button aria-pressed={language === "ar"} className={language === "ar" ? "language-option active" : "language-option"} onClick={() => setLanguage("ar")} type="button">ع<span className="sr-only"> العربية</span></button><span>{t("Language", "اللغة")}</span></div><div className="user-chip"><span className="user-avatar">{userEmail ? userEmail.charAt(0).toUpperCase() : "S"}</span><span><strong>{userEmail ? userEmail.split("@")[0] : "Preview mode"}</strong><small>{t(userEmail ? "Authenticated account" : "Preview workspace", userEmail ? "حساب موثق" : "مساحة تجريبية")}</small></span>{userEmail ? <button className="signout-button" onClick={signOut} type="button">{t("Exit", "خروج")}</button> : <Link className="signout-button" href="/login">{t("Sign in", "دخول")}</Link>}</div></div>
     </aside>
-    <div className="app-main-column"><header className="app-topbar"><button className="mobile-menu-button" aria-expanded={mobileOpen} aria-controls="primary-navigation" aria-label={t("Open navigation", "فتح القائمة")} onClick={() => setMobileOpen(true)} type="button">☰</button><div className="topbar-breadcrumb"><span>{t("Workspace", "مساحة العمل")}</span><b>/</b><strong>{current ? t(current.label, current.arabic) : t("Overview", "نظرة عامة")}</strong></div><div className="topbar-actions"><button className="topbar-icon-button" aria-label={t("Notifications", "الإشعارات")} type="button">♢<i /></button><Link className="topbar-help" href="/sources">{t("Need help?", "تحتاج مساعدة؟")}</Link></div></header><main className="main-content">{children}</main></div>
+    <div className="app-main-column"><header className="app-topbar"><button className="mobile-menu-button" aria-expanded={mobileOpen} aria-controls="primary-navigation" aria-label={t("Open navigation", "فتح القائمة")} onClick={() => setMobileOpen(true)} type="button">☰</button><div className="topbar-breadcrumb"><span>{t("Workspace", "مساحة العمل")}</span><b>/</b><strong>{current ? t(current.label, current.arabic) : t("Overview", "نظرة عامة")}</strong></div><div className="topbar-actions"><Link className="topbar-action-link" href="/workspaces">＋ {t("New workspace", "مساحة جديدة")}</Link><Link className="topbar-action-link topbar-action-primary" href="/sources">⌁ {t("Connect source", "ربط مصدر")}</Link><button className="topbar-icon-button" aria-label={t("Notifications", "الإشعارات")} type="button">♢<i /></button><Link className="topbar-help" href="/sources">{t("Need help?", "تحتاج مساعدة؟")}</Link></div></header><main className="main-content">{children}</main></div>
   </div>;
 }
