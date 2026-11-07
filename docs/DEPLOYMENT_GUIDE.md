@@ -40,3 +40,24 @@ Never expose service-role keys, OAuth secrets, access tokens, or private credent
 ## Rollback
 
 Rollback the application deployment through Vercel to the last verified build. Database changes must be forward-compatible; use a compensating migration rather than rewriting an applied migration. Revoke compromised provider tokens and rotate affected secrets immediately.
+
+## Local pre-migration safety checks
+
+The repository includes a read-only preflight for Migration `0004`:
+
+```bash
+export DATABASE_URL='postgresql://...'
+npm run db:preflight
+```
+
+The script validates the PostgreSQL connection, confirms that `sources`, `sync_jobs`, and `workspace_members` exist, checks for cross-workspace `sync_jobs` rows, checks duplicate source/workspace pairs, and reports whether the `0004` constraints or policy already exist. It never executes DDL and never changes data.
+
+For a schema-only backup before the checks:
+
+```bash
+npm run db:preflight -- --backup-dir "$HOME/sensor-brand-ai-backups"
+```
+
+The backup directory must be outside the repository. The script refuses dashboard URLs, HTTP URLs, missing `DATABASE_URL`, missing `psql`, and backup paths inside the repository. A failing integrity check exits non-zero and blocks the next deployment step.
+
+The underlying SQL is [`scripts/sql/pre-migration-check.sql`](../scripts/sql/pre-migration-check.sql). Do not pass a service-role key as `DATABASE_URL`; use a PostgreSQL connection string with appropriate database privileges and keep it out of Git, logs, and screenshots.

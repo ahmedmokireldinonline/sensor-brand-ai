@@ -110,3 +110,7 @@ The Vercel application is live and publicly reachable, but production environmen
 ## Integrity statement
 
 This report distinguishes implemented code from placeholders and external blockers. No provider connection, production migration, customer data, analytics result, or deployment configuration is claimed as successful without direct verification.
+
+## Local pre-migration automation
+
+Added `scripts/pre-migration-check.sh` and `scripts/sql/pre-migration-check.sql`. The command is available as `npm run db:preflight`. It performs a read-only PostgreSQL preflight, checks required tables and data integrity, reports existing `0004` objects, and can create an optional schema-only backup outside the repository. It refuses missing or incorrectly formatted connection settings and never runs DDL.
