@@ -24,6 +24,8 @@ jobs:
         run: npm run typecheck
       - name: Lint
         run: npm run lint
+      - name: Automated tests
+        run: npm test
       - name: Dependency audit
         run: npm audit --audit-level=critical
       - name: Build
