@@ -1,94 +1,26 @@
+"use client";
+
 import Link from "next/link";
-import { AppShell } from "@/components/app-shell";
+import { AppShell, useLanguage } from "@/components/app-shell";
 
 const metrics = [
-  { label: "Mentions tracked", arabic: "الإشارات المرصودة", value: "—", detail: "Connect a source to begin" },
-  { label: "Net sentiment", arabic: "صافي المشاعر", value: "—", detail: "Waiting for customer opinion data" },
-  { label: "Open action items", arabic: "الإجراءات المفتوحة", value: "—", detail: "Actions appear after review" },
+  { label: "Mentions tracked", ar: "الإشارات المرصودة", value: "—", detail: "Connect a source to begin", icon: "⌁", tone: "teal" },
+  { label: "Net sentiment", ar: "صافي المشاعر", value: "—", detail: "Waiting for customer opinion data", icon: "◒", tone: "blue" },
+  { label: "Open action items", ar: "الإجراءات المفتوحة", value: "—", detail: "Actions appear after review", icon: "↗", tone: "amber" },
 ];
 
 export default function DashboardPage() {
+  const { t } = useLanguage();
   return (
     <AppShell>
-      <header className="page-header">
-        <div>
-          <p className="eyebrow">WORKSPACE OVERVIEW / نظرة عامة</p>
-          <h1>Good decisions start with better signals.</h1>
-          <p className="page-intro">A calm, evidence-first view of what customers are saying about your brand.</p>
-        </div>
-        <Link className="button button-primary" href="/workspaces">
-          <span>＋</span> Create workspace
-        </Link>
+      <header className="page-header dashboard-header">
+        <div><div className="header-status"><span className="status-live-dot" />{t("Workspace is ready", "مساحة العمل جاهزة")}</div><h1>{t("Make every customer signal actionable.", "حوّل كل إشارة من العميل إلى إجراء واضح.")}</h1><p className="page-intro">{t("A focused command center for the conversations, themes, and decisions shaping your brand.", "مركز قيادة واضح للمحادثات والموضوعات والقرارات التي تشكل علامتك التجارية.")}</p></div>
+        <div className="header-actions"><Link className="button button-primary" href="/workspaces"><span>＋</span>{t("Create workspace", "إنشاء مساحة عمل")}</Link><button className="icon-button" aria-label="More dashboard actions" type="button">•••</button></div>
       </header>
-
-      <section className="metric-grid" aria-label="Workspace metrics">
-        {metrics.map((metric) => (
-          <article className="metric-card" key={metric.label}>
-            <div className="metric-card-top">
-              <span>{metric.label}</span>
-              <span className="metric-arabic" dir="rtl">{metric.arabic}</span>
-            </div>
-            <strong className="metric-value">{metric.value}</strong>
-            <span className="metric-detail">{metric.detail}</span>
-          </article>
-        ))}
-      </section>
-
-      <section className="content-grid">
-        <article className="panel panel-large">
-          <div className="panel-heading">
-            <div>
-              <p className="panel-kicker">SIGNAL HEALTH</p>
-              <h2>Sentiment over time</h2>
-            </div>
-            <button className="select-button" type="button">Last 30 days <span>⌄</span></button>
-          </div>
-          <div className="chart-empty">
-            <div className="chart-lines"><span /><span /><span /><span /></div>
-            <div className="empty-orb">◌</div>
-            <strong>No signal data yet</strong>
-            <p>Connect Facebook, Instagram, Google Reviews, or an import source to see trends here.</p>
-            <Link className="text-link" href="/workspaces">Manage sources <span>→</span></Link>
-          </div>
-        </article>
-
-        <article className="panel">
-          <div className="panel-heading">
-            <div>
-              <p className="panel-kicker">OPERATIONS</p>
-              <h2>Recurring complaints</h2>
-            </div>
-            <span className="panel-count">0 / 5</span>
-          </div>
-          <div className="list-empty">
-            <span className="empty-icon">◎</span>
-            <strong>Nothing to resolve yet</strong>
-            <p>Once opinions are classified, recurring operational themes will appear here.</p>
-          </div>
-        </article>
-      </section>
-
-      <section className="bottom-grid">
-        <article className="panel">
-          <div className="panel-heading">
-            <div>
-              <p className="panel-kicker">INBOX</p>
-              <h2>Latest mentions</h2>
-            </div>
-            <span className="status-pill">No data</span>
-          </div>
-          <div className="table-empty">
-            <div className="table-row table-row-head"><span>Source</span><span>Opinion</span><span>Status</span></div>
-            <div className="table-row table-row-empty"><span>—</span><span>Connect a source to populate this view</span><span>—</span></div>
-          </div>
-        </article>
-        <article className="panel action-panel">
-          <p className="panel-kicker">NEXT STEP / الخطوة التالية</p>
-          <h2>Make this workspace yours.</h2>
-          <p>Set up the brand profile, connect a source, and define who should review sensitive customer conversations.</p>
-          <Link className="button button-secondary" href="/workspaces">Open workspace settings <span>→</span></Link>
-        </article>
-      </section>
+      <section className="dashboard-setup-banner"><div className="setup-progress"><span className="setup-icon">✦</span><div><p className="panel-kicker">{t("GET STARTED", "ابدأ الآن")}</p><h2>{t("Build your listening layer in three steps.", "ابنِ طبقة الاستماع الخاصة بك في ثلاث خطوات.")}</h2><p>{t("Create a workspace, connect a source, and let Sensor Brand organize the signal.", "أنشئ مساحة عمل، وصّل مصدراً، ودع Sensor Brand ينظم الإشارات.")}</p></div></div><div className="setup-steps"><span className="done">01 <b>{t("Workspace", "مساحة العمل")}</b></span><span>02 <b>{t("Connect source", "ربط مصدر")}</b></span><span>03 <b>{t("Review signal", "مراجعة الإشارة")}</b></span></div><Link className="text-link" href="/workspaces">{t("Start setup", "ابدأ الإعداد")} <span>→</span></Link></section>
+      <section className="metric-grid" aria-label="Workspace metrics">{metrics.map((metric) => <article className={`metric-card metric-card-modern ${metric.tone}`} key={metric.label}><div className="metric-card-top"><span>{t(metric.label, metric.ar)}</span><span className="metric-icon">{metric.icon}</span></div><strong className="metric-value">{metric.value}</strong><span className="metric-detail">{t(metric.detail, metric.detail)}</span><div className="metric-sparkline"><i /><i /><i /><i /><i /><i /><i /></div></article>)}</section>
+      <section className="content-grid dashboard-main-grid"><article className="panel panel-large signal-overview-panel"><div className="panel-heading"><div><p className="panel-kicker">{t("SIGNAL HEALTH", "صحة الإشارة")}</p><h2>{t("Sentiment over time", "المشاعر عبر الزمن")}</h2></div><div className="panel-heading-actions"><button className="select-button" type="button">{t("Last 30 days", "آخر 30 يوماً")} <span>⌄</span></button><button className="panel-menu" aria-label="Chart options" type="button">•••</button></div></div><div className="chart-empty chart-empty-modern"><div className="chart-lines"><span /><span /><span /><span /><span /></div><div className="empty-orb">◌</div><strong>{t("Your first signal will appear here", "ستظهر أول إشارة لك هنا")}</strong><p>{t("Connect Facebook, Instagram, Google Reviews, or an import source to see trends and sentiment movement.", "صِل Facebook أو Instagram أو Google Reviews أو استورد بياناتك لرؤية الاتجاهات وحركة المشاعر.")}</p><Link className="text-link" href="/sources">{t("Connect a source", "ربط مصدر")} <span>→</span></Link></div></article><article className="panel action-queue-panel"><div className="panel-heading"><div><p className="panel-kicker">{t("ACTION QUEUE", "قائمة الإجراءات")}</p><h2>{t("What needs attention", "ما يحتاج إلى انتباه")}</h2></div><span className="panel-count">0</span></div><div className="queue-empty"><span className="queue-icon">✓</span><strong>{t("You are all caught up", "لا توجد إجراءات معلقة")}</strong><p>{t("Reviewed conversations and recurring issues will be prioritized here.", "ستظهر هنا المحادثات والموضوعات المتكررة بعد مراجعتها.")}</p></div><Link className="quiet-link" href="/analytics">{t("View analytics", "عرض التحليلات")} <span>→</span></Link></article></section>
+      <section className="bottom-grid"><article className="panel recent-panel"><div className="panel-heading"><div><p className="panel-kicker">{t("INBOX", "الوارد")}</p><h2>{t("Latest mentions", "أحدث الإشارات")}</h2></div><Link className="quiet-link" href="/sources">{t("Manage sources", "إدارة المصادر")} →</Link></div><div className="inbox-empty"><span className="inbox-icon">⌁</span><div><strong>{t("No customer conversations yet", "لا توجد محادثات عملاء بعد")}</strong><p>{t("Connect a source to bring your first comments, reviews, and mentions into one inbox.", "صِل مصدراً لجلب التعليقات والمراجعات والإشارات إلى صندوق وارد واحد.")}</p></div></div></article><article className="panel action-panel next-step-panel"><p className="panel-kicker">{t("RECOMMENDED NEXT STEP", "الخطوة التالية المقترحة")}</p><h2>{t("Give your workspace a point of view.", "امنح مساحة عملك رؤية واضحة.")}</h2><p>{t("Define the brand context that helps the system distinguish urgency from ordinary noise.", "حدد سياق العلامة التجارية الذي يساعد النظام على التمييز بين الإلحاح والضوضاء العادية.")}</p><Link className="button button-secondary" href="/workspaces">{t("Open workspace settings", "فتح إعدادات مساحة العمل")} <span>→</span></Link></article></section>
     </AppShell>
   );
 }
