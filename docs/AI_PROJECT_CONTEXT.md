@@ -8,7 +8,7 @@ The product language is English by default with Arabic support and RTL layout sw
 
 ## 2. Current delivery state
 
-The repository is a buildable Next.js App Router application. Delivered screens are the landing shell, Dashboard, Workspaces, Sources, Sync Center, and Analytics. Delivered server routes are the provider webhook intake route and the background sync enqueue route. Supabase contains the foundation schema plus the sync automation tables. There is no production OAuth connection, no real source credential in the repository, and no running worker yet.
+The repository is a buildable Next.js App Router application. Delivered screens are the landing shell, Dashboard, Workspaces, Sources, Sync Center, and Analytics. Delivered server routes are the provider webhook intake route and the background sync enqueue route. Supabase contains the foundation schema plus the sync automation tables and onboarding RPC. Workspaces and source records now read and write through the browser Supabase client under Auth/RLS. There is no production OAuth connection, no real source credential in the repository, and no running worker yet.
 
 The current UI intentionally shows empty states because no organization, workspace, source, or mention data has been seeded. Do not add fake analytics data to make the dashboard appear populated; connect the data layer instead.
 
@@ -28,16 +28,18 @@ The current UI intentionally shows empty states because no organization, workspa
 - `app/globals.css`: shared visual system and responsive styles.
 - `components/app-shell.tsx`: sidebar, workspace switcher placeholder, language toggle, and navigation.
 - `app/dashboard/page.tsx`: overview metrics and operational empty states.
-- `app/workspaces/page.tsx`: workspace creation UI placeholder; currently captures form state locally and does not write to Supabase.
-- `app/sources/page.tsx`: Meta, Google Business, and Reddit source setup UI; currently captures setup state locally and does not perform OAuth.
+- `app/workspaces/page.tsx`: authenticated workspace list and creation UI using the onboarding RPC.
+- `app/sources/page.tsx`: workspace-scoped source list and source-record creation for Meta, Google Business, and Reddit; OAuth is still separate.
 - `app/sync/page.tsx`: webhook and background sync monitoring UI.
 - `app/analytics/page.tsx`: mention, sentiment, theme, language, and source-performance UI; currently uses empty states and local filters.
 - `app/api/webhooks/[provider]/route.ts`: webhook verification for Meta and generic event intake for Meta/Google/Reddit.
 - `app/api/sync/run/route.ts`: queues a sync job in Supabase using `source_id`, `workspace_id`, and `trigger_type`.
 - `lib/supabase-admin.ts`: minimal server-side Supabase REST insert helper. It requires `NEXT_PUBLIC_SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` at runtime.
+- `lib/supabase/client.ts`: browser client using `@supabase/ssr`, the publishable key, Auth session, and RLS.
 - `supabase/migrations/0001_sensor_brand_foundation.sql`: actual foundation schema for organizations, workspaces, sources, mentions, membership tables, triggers, and RLS.
 - `supabase/migrations/0001_phase2_foundation.sql`: earlier placeholder file; it intentionally creates no tables and should not be treated as the applied schema.
 - `supabase/migrations/0002_sync_automation.sql`: webhook events, sync jobs, and source sync cursors.
+- `supabase/migrations/0003_onboarding_rpc.sql`: authenticated transaction that creates an organization, owner membership, workspace, and workspace admin membership.
 - `public/manus-routes.json`: route manifest for `/`, `/dashboard`, `/workspaces`, `/sources`, `/sync`, and `/analytics`.
 
 ## 5. Supabase state
@@ -90,16 +92,15 @@ Validates `source_id`, `workspace_id`, and an allowed trigger type, then inserts
 
 ## 7. Known gaps to fix next
 
-1. Add Supabase Auth and create the first authenticated organization owner.
-2. Replace local workspace/source forms with authenticated Supabase writes.
-3. Implement OAuth for Meta, Google Business Profile, and Reddit; store refresh/access tokens in a proper secret store or encrypted server-side store.
-4. Implement provider-specific webhook signature validation and event-to-source mapping.
-5. Implement background worker execution and a scheduler. Vercel request handlers should only enqueue work; long-running sync should use a durable worker or queue-compatible runtime.
-6. Add a classification table and worker for sentiment, topic, urgency, language, and dialect confidence.
-7. Connect Analytics to real queries over `mentions` and classification results.
-8. Add automated tests for RLS, webhook idempotency, cursor advancement, provider adapters, and Arabic/Egyptian slang classification.
-9. Configure production environment variables in Vercel; never commit them.
-10. Review Supabase security advisors after each DDL change.
+1. Add the login/signup/callback UI and middleware session refresh; the browser client already expects Supabase Auth.
+2. Implement OAuth for Meta, Google Business Profile, and Reddit; store refresh/access tokens in a proper secret store or encrypted server-side store.
+3. Implement provider-specific webhook signature validation and event-to-source mapping.
+4. Implement background worker execution and a scheduler. Vercel request handlers should only enqueue work; long-running sync should use a durable worker or queue-compatible runtime.
+5. Add a classification table and worker for sentiment, topic, urgency, language, and dialect confidence.
+6. Connect Analytics to real queries over `mentions` and classification results.
+7. Add automated tests for RLS, webhook idempotency, cursor advancement, provider adapters, and Arabic/Egyptian slang classification.
+8. Configure production environment variables in Vercel; never commit them.
+9. Review Supabase security advisors after each DDL change.
 
 ## 8. Debugging protocol for future AI agents
 

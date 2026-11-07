@@ -11,13 +11,16 @@
 - Analytics Dashboard UI for mentions, sentiment, themes, language, and source performance.
 - Supabase foundation migration with organization/workspace/source/mention tables and RLS.
 - Supabase sync migration with webhook events, sync jobs, and source cursors.
+- Supabase browser client using `@supabase/ssr` and the publishable key.
+- Auth/RLS-scoped workspace reads and atomic Organization/Workspace onboarding RPC.
+- Supabase-backed source reads and pending source-record creation.
 - Meta verification route and generic provider webhook intake route.
 - Sync job enqueue route.
 - Production build verification.
 
 ## Not yet connected
 
-- Authentication and first organization bootstrap.
+- Login/signup/callback UI and session-refresh middleware.
 - OAuth and provider account linking.
 - Provider-specific webhook signature validation.
 - Provider-specific comment/review fetch adapters.
