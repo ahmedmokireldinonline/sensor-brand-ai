@@ -1,33 +1,32 @@
 # Implementation Status
 
 ## Delivered
-
 - Private GitHub repository and Next.js TypeScript foundation.
 - Product landing page with clear prototype and sign-in entry points.
-- Supabase email sign-in/signup page and Auth callback route.
+- Supabase email sign-in/signup page and safe Auth callback route with redirect allowlist.
 - Responsive bilingual shell with English/Arabic toggle and RTL support.
-- Dashboard overview UI.
-- Workspace management UI and creation form placeholder.
-- Source management UI for Meta, Google Business, and Reddit.
-- Sync Center UI for webhook and background-sync monitoring.
-- Analytics Dashboard UI for mentions, sentiment, themes, language, and source performance.
+- Dashboard, workspace, sources, sync, analytics, and integration settings UI.
 - Supabase foundation migration with organization/workspace/source/mention tables and RLS.
-- Supabase sync migration with webhook events, sync jobs, and source cursors.
-- Supabase browser client using `@supabase/ssr` and the publishable key.
-- Auth/RLS-scoped workspace reads and atomic Organization/Workspace onboarding RPC.
-- Supabase-backed source reads and pending source-record creation.
-- Meta verification route and generic provider webhook intake route.
-- Sync job enqueue route.
-- Production build verification.
+- Forward-only security migration enforcing source/workspace consistency and authenticated sync-job insertion.
+- Supabase browser client and server session client using `@supabase/ssr`.
+- Root middleware that refreshes sessions and redirects unauthenticated internal page requests.
+- Sync enqueue route that derives workspace and requester identity from the authenticated session; client-provided workspace/requester fields are rejected.
+- OAuth authorization state bound to provider, workspace, and short-lived server-only cookie state.
+- Webhook intake that verifies raw-body HMAC signatures, rejects stale deliveries, requires source identifiers, resolves active sources server-side, and stores idempotent delivery records.
+- Browser credential persistence removed from Integration Settings; values remain in memory until server-side OAuth/secret storage is connected.
+- Non-interactive ESLint CLI configuration and CI for typecheck, lint, build, dependency audit, and secret scanning.
+- Production build and TypeScript verification pass locally.
 
 ## Not yet connected
+- Provider-specific OAuth code exchange, encrypted token vault, refresh, revocation, and account discovery.
+- Provider-specific webhook adapters and normalization for each platform (the intake boundary is hardened, but payload normalization is not complete).
+- Durable background worker, scheduler, retry queue, and AI classification pipeline.
+- Live analytics queries, exports, reporting, and scheduled reports.
+- Automatic customer replies (must remain disabled until human approval and provider permissions are implemented).
+- Vercel production project, Supabase migration application, and environment-variable configuration.
 
-- Login/signup/callback UI and session-refresh middleware.
-- OAuth and provider account linking.
-- Provider-specific webhook signature validation.
-- Provider-specific comment/review fetch adapters.
-- Durable background worker and scheduler.
-- Real mention classification and Egyptian Arabic/slang analysis.
-- Live Analytics queries.
-- Automatic customer replies.
-- Vercel production project and environment variables.
+## Verification notes
+- `npm run typecheck`: passes.
+- `npm run lint`: passes with existing non-blocking warnings in legacy client components.
+- `npm run build`: passes; only the existing Autoprefixer compatibility warning remains.
+- `npm audit`: still reports upstream dependency advisories, including a high PostCSS advisory; the CI gate is configured to fail on critical vulnerabilities while the dependency upgrade requires a tested Next.js major-version migration.

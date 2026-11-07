@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { randomBytes } from "node:crypto";
+import { getAuthenticatedUser } from "@/lib/supabase/server";
 
 const oauth: Record<string, { clientEnv: string; redirectEnv: string; authorizeUrl: string; scopes: string[] }> = {
   linkedin: { clientEnv: "LINKEDIN_CLIENT_ID", redirectEnv: "LINKEDIN_REDIRECT_URI", authorizeUrl: "https://www.linkedin.com/oauth/v2/authorization", scopes: ["openid", "profile", "email", "w_member_social"] },
@@ -12,18 +13,19 @@ export async function GET(request: NextRequest, context: { params: Promise<{ pro
   const { provider } = await context.params;
   const config = oauth[provider];
   if (!config) return NextResponse.json({ error: "OAuth is not supported for this provider" }, { status: 404 });
+  const { supabase, user } = await getAuthenticatedUser();
+  if (!supabase || !user) return NextResponse.json({ error: "Authentication required" }, { status: 401 });
+  const workspaceId = new URL(request.url).searchParams.get("workspace_id");
+  if (!workspaceId) return NextResponse.json({ error: "workspace_id is required" }, { status: 400 });
+  const { data: membership } = await supabase.from("workspace_members").select("role").eq("workspace_id", workspaceId).eq("user_id", user.id).maybeSingle();
+  if (!membership || membership.role !== "admin") return NextResponse.json({ error: "Workspace administrator access required" }, { status: 403 });
   const clientId = process.env[config.clientEnv];
   const redirectUri = process.env[config.redirectEnv] || `${new URL(request.url).origin}/api/integrations/${provider}/callback`;
-  if (!clientId) return NextResponse.json({ error: `Missing ${config.clientEnv}. Add it to the server environment before connecting.` }, { status: 503 });
-
-  const state = randomBytes(24).toString("hex");
+  if (!clientId) return NextResponse.json({ error: `Missing ${config.clientEnv}` }, { status: 503 });
+  const state = randomBytes(32).toString("hex");
   const callback = new URL(config.authorizeUrl);
-  callback.searchParams.set("response_type", "code");
-  callback.searchParams.set("client_id", clientId);
-  callback.searchParams.set("redirect_uri", redirectUri);
-  callback.searchParams.set("state", state);
-  callback.searchParams.set("scope", config.scopes.join(" "));
+  callback.searchParams.set("response_type", "code"); callback.searchParams.set("client_id", clientId); callback.searchParams.set("redirect_uri", redirectUri); callback.searchParams.set("state", state); callback.searchParams.set("scope", config.scopes.join(" "));
   const response = NextResponse.redirect(callback);
-  response.cookies.set("sensor_oauth_state", `${provider}:${state}`, { httpOnly: true, secure: true, sameSite: "lax", maxAge: 600, path: "/" });
+  response.cookies.set("sensor_oauth_state", `${provider}:${workspaceId}:${state}`, { httpOnly: true, secure: process.env.NODE_ENV === "production", sameSite: "lax", maxAge: 600, path: "/" });
   return response;
 }
