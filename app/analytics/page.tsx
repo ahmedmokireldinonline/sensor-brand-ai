@@ -1,60 +1,20 @@
 "use client";
 
 import { useState } from "react";
-import { AppShell } from "@/components/app-shell";
+import { AppShell, useLanguage } from "@/components/app-shell";
 
-const metrics = [
-  { label: "Total mentions", arabic: "إجمالي الإشارات", value: "—", detail: "No source data yet" },
-  { label: "Positive sentiment", arabic: "مشاعر إيجابية", value: "—", detail: "Waiting for classification" },
-  { label: "Negative sentiment", arabic: "مشاعر سلبية", value: "—", detail: "Waiting for classification" },
-  { label: "Unresolved themes", arabic: "موضوعات تحتاج متابعة", value: "—", detail: "Themes appear after analysis" },
+type Metric = { label: "dashboard.metrics.volume" | "analytics.positive" | "analytics.negative" | "analytics.unresolved"; detail: "analytics.noSourceData" | "analytics.waitingClassify" | "analytics.themesAfterAnalysis" };
+const metrics: Metric[] = [
+  { label: "dashboard.metrics.volume", detail: "analytics.noSourceData" },
+  { label: "analytics.positive", detail: "analytics.waitingClassify" },
+  { label: "analytics.negative", detail: "analytics.waitingClassify" },
+  { label: "analytics.unresolved", detail: "analytics.themesAfterAnalysis" },
 ];
-
-const sentimentLegend = [
-  { label: "Positive", arabic: "إيجابي", color: "positive" },
-  { label: "Neutral", arabic: "محايد", color: "neutral" },
-  { label: "Negative", arabic: "سلبي", color: "negative" },
-];
-
+const sentimentLegend = [{ label: "analytics.positiveLabel", color: "positive" }, { label: "analytics.neutralLabel", color: "neutral" }, { label: "analytics.negativeLabel", color: "negative" }] as const;
 export default function AnalyticsPage() {
-  const [period, setPeriod] = useState("30 days");
-  const [source, setSource] = useState("All sources");
-
-  return (
-    <AppShell>
-      <header className="page-header analytics-header">
-        <div>
-          <p className="eyebrow">CUSTOMER SIGNALS / إشارات العملاء</p>
-          <h1>Know what the brand is feeling.</h1>
-          <p className="page-intro">A focused view of volume, sentiment, themes, and language across every connected source.</p>
-        </div>
-        <div className="analytics-filters">
-          <label><span>Period</span><select value={period} onChange={(event) => setPeriod(event.target.value)}><option>7 days</option><option>30 days</option><option>90 days</option></select></label>
-          <label><span>Source</span><select value={source} onChange={(event) => setSource(event.target.value)}><option>All sources</option><option>Meta</option><option>Google</option><option>Reddit</option></select></label>
-        </div>
-      </header>
-
-      <section className="analytics-metric-grid" aria-label="Analytics summary">
-        {metrics.map((metric) => <article className="metric-card analytics-metric-card" key={metric.label}><div className="metric-card-top"><span>{metric.label}</span><span className="metric-arabic" dir="rtl">{metric.arabic}</span></div><strong className="metric-value">{metric.value}</strong><span className="metric-detail">{metric.detail}</span></article>)}
-      </section>
-
-      <section className="analytics-main-grid">
-        <article className="panel sentiment-panel">
-          <div className="panel-heading"><div><p className="panel-kicker">SENTIMENT TREND / اتجاه المشاعر</p><h2>How the conversation is moving</h2></div><span className="analytics-period">{period}</span></div>
-          <div className="analytics-chart-empty"><div className="chart-lines"><span /><span /><span /><span /><span /></div><div className="analytics-chart-orb">◒</div><strong>Sentiment needs mentions first</strong><p>Connect a source and the classified conversation will appear here over time.</p><div className="sentiment-legend">{sentimentLegend.map((item) => <span key={item.label}><i className={item.color} />{item.label}<small dir="rtl">{item.arabic}</small></span>)}</div></div>
-        </article>
-        <article className="panel distribution-panel">
-          <div className="panel-heading"><div><p className="panel-kicker">MIX</p><h2>Sentiment mix</h2></div><span className="panel-count">0 mentions</span></div>
-          <div className="donut-empty"><div className="donut-ring"><div>—<small>classified</small></div></div><p>There is no classified sentiment in this period yet.</p></div>
-        </article>
-      </section>
-
-      <section className="analytics-secondary-grid">
-        <article className="panel theme-panel"><div className="panel-heading"><div><p className="panel-kicker">TOP THEMES / أهم الموضوعات</p><h2>What customers are talking about</h2></div><span className="panel-count">0 themes</span></div><div className="theme-empty"><span className="theme-empty-icon">✦</span><strong>Topics will appear here</strong><p>AI will group recurring subjects such as delivery, quality, support, and pricing after mentions are classified.</p></div></article>
-        <article className="panel language-panel"><div className="panel-heading"><div><p className="panel-kicker">LANGUAGE SIGNAL</p><h2>Arabic & English</h2></div></div><div className="language-bars"><div><div className="bar-label"><span>Arabic</span><strong>—</strong></div><div className="bar-track"><i className="bar-arabic" /></div></div><div><div className="bar-label"><span>English</span><strong>—</strong></div><div className="bar-track"><i className="bar-english" /></div></div><div><div className="bar-label"><span>Egyptian slang</span><strong>—</strong></div><div className="bar-track"><i className="bar-slang" /></div></div></div><p className="language-note">Dialect detection will separate Egyptian Arabic, Modern Standard Arabic, and English signals.</p></article>
-      </section>
-
-      <section className="analytics-bottom-grid"><article className="panel source-performance-panel"><div className="panel-heading"><div><p className="panel-kicker">SOURCE PERFORMANCE</p><h2>Where the signal comes from</h2></div><span className="panel-count">{source}</span></div><div className="analytics-table"><div className="analytics-row analytics-row-head"><span>Source</span><span>Mentions</span><span>Sentiment</span><span>Last sync</span></div><div className="analytics-row analytics-row-empty"><span>—</span><span>—</span><span>—</span><span>Connect a source</span></div></div></article><article className="panel analyst-note-panel"><p className="panel-kicker">ANALYST NOTE / ملاحظة المحلل</p><h2>Start with the signal, then decide.</h2><p>Analytics will help your team distinguish volume from urgency and recurring themes from one-off noise.</p><div className="bilingual-caption" dir="rtl">ابدأ بالإشارة، ثم اتخذ القرار المناسب.</div></article></section>
-    </AppShell>
-  );
+  const { tKey } = useLanguage();
+  const [period, setPeriod] = useState("30d");
+  const [source, setSource] = useState("all");
+  const periodLabel = period === "7d" ? tKey("analytics.sevenDays") : period === "90d" ? tKey("analytics.ninetyDays") : tKey("analytics.thirtyDays");
+  return <AppShell><header className="page-header analytics-header"><div><p className="eyebrow">{tKey("analytics.eyebrow")}</p><h1>{tKey("analytics.title")}</h1><p className="page-intro">{tKey("analytics.intro")}</p></div><div className="analytics-filters"><label><span>{tKey("analytics.period")}</span><select value={period} onChange={(event) => setPeriod(event.target.value)}><option value="7d">{tKey("analytics.sevenDays")}</option><option value="30d">{tKey("analytics.thirtyDays")}</option><option value="90d">{tKey("analytics.ninetyDays")}</option></select></label><label><span>{tKey("analytics.source")}</span><select value={source} onChange={(event) => setSource(event.target.value)}><option value="all">{tKey("analytics.allSources")}</option><option value="meta">{tKey("common.meta")}</option><option value="google">{tKey("common.googleBusiness")}</option><option value="reddit">{tKey("common.reddit")}</option></select></label></div></header><section className="analytics-metric-grid" aria-label={tKey("analytics.summary")}>{metrics.map((metric) => <article className="metric-card analytics-metric-card" key={metric.label}><div className="metric-card-top"><span>{tKey(metric.label)}</span></div><strong className="metric-value">—</strong><span className="metric-detail">{tKey(metric.detail)}</span></article>)}</section><section className="analytics-main-grid"><article className="panel sentiment-panel"><div className="panel-heading"><div><p className="panel-kicker">{tKey("analytics.trend")}</p><h2>{tKey("analytics.movement")}</h2></div><span className="analytics-period">{periodLabel}</span></div><div className="analytics-chart-empty"><div className="chart-lines"><span /><span /><span /><span /><span /></div><div className="analytics-chart-orb">◒</div><strong>{tKey("analytics.needsMentions")}</strong><p>{tKey("analytics.trendIntro")}</p><div className="sentiment-legend">{sentimentLegend.map((item) => <span key={item.label}><i className={item.color} />{tKey(item.label)} </span>)}</div></div></article><article className="panel distribution-panel"><div className="panel-heading"><div><p className="panel-kicker">{tKey("analytics.mix")}</p><h2>{tKey("analytics.sentimentMix")}</h2></div><span className="panel-count">0 {tKey("analytics.mentions")}</span></div><div className="donut-empty"><div className="donut-ring"><div>—<small>{tKey("analytics.classified")}</small></div></div><p>{tKey("analytics.noClassified")}</p></div></article></section><section className="analytics-secondary-grid"><article className="panel theme-panel"><div className="panel-heading"><div><p className="panel-kicker">{tKey("analytics.topThemes")}</p><h2>{tKey("analytics.customersTalking")}</h2></div><span className="panel-count">0</span></div><div className="theme-empty"><span className="theme-empty-icon">✦</span><strong>{tKey("analytics.topicsHere")}</strong><p>{tKey("analytics.topicsIntro")}</p></div></article><article className="panel language-panel"><div className="panel-heading"><div><p className="panel-kicker">{tKey("analytics.languageSignal")}</p><h2>{tKey("analytics.arabicEnglish")}</h2></div></div><div className="language-bars"><div><div className="bar-label"><span>{tKey("common.arabic")}</span><strong>—</strong></div><div className="bar-track"><i className="bar-arabic" /></div></div><div><div className="bar-label"><span>{tKey("common.english")}</span><strong>—</strong></div><div className="bar-track"><i className="bar-english" /></div></div><div><div className="bar-label"><span>{tKey("analytics.egyptianSlang")}</span><strong>—</strong></div><div className="bar-track"><i className="bar-slang" /></div></div></div><p className="language-note">{tKey("analytics.dialectIntro")}</p></article></section><section className="analytics-bottom-grid"><article className="panel source-performance-panel"><div className="panel-heading"><div><p className="panel-kicker">{tKey("analytics.sourcePerformance")}</p><h2>{tKey("analytics.signalFrom")}</h2></div><span className="panel-count">{source === "all" ? tKey("analytics.allSources") : source}</span></div><div className="analytics-table"><div className="analytics-row analytics-row-head"><span>{tKey("analytics.source")}</span><span>{tKey("analytics.mentionsHeader")}</span><span>{tKey("analytics.sentimentHeader")}</span><span>{tKey("analytics.lastSync")}</span></div><div className="analytics-row analytics-row-empty"><span>—</span><span>—</span><span>—</span><span>{tKey("common.connectSource")}</span></div></div></article><article className="panel analyst-note-panel"><p className="panel-kicker">{tKey("analytics.analystNote")}</p><h2>{tKey("analytics.startWithSignal")}</h2><p>{tKey("analytics.analystIntro")}</p></article></section></AppShell>;
 }
