@@ -1,1 +1,1 @@
-{"routes":[{"path":"/","title":"Sensor Brand AI"},{"path":"/dashboard","title":"Dashboard"},{"path":"/workspaces","title":"Workspaces"},{"path":"/sources","title":"Sources"},{"path":"/sync","title":"Sync Center"},{"path":"/analytics","title":"Analytics"}]}
+{"routes":[{"path":"/","title":"Sensor Brand AI"},{"path":"/login","title":"Sign in"},{"path":"/dashboard","title":"Dashboard"},{"path":"/workspaces","title":"Workspaces"},{"path":"/sources","title":"Sources"},{"path":"/sync","title":"Sync Center"},{"path":"/analytics","title":"Analytics"}]}

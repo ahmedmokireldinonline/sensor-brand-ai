@@ -4,7 +4,7 @@ Sensor Brand AI is a bilingual Arabic/English customer-opinion intelligence plat
 
 ## Current state
 
-This repository contains the working Next.js foundation and the first UI/system layers: Dashboard, Workspaces, Sources, Sync Center, Analytics, webhook intake, sync-job enqueue, Supabase migrations, responsive bilingual styling, and deployment documentation. The UI intentionally uses empty states until authentication, OAuth, source adapters, background workers, and live analytics queries are connected.
+This repository contains the working Next.js prototype: a product landing page, Supabase email login/signup, internal Dashboard, Workspaces, Sources, Sync Center, Analytics, webhook intake, sync-job enqueue, Supabase migrations, responsive bilingual styling, and deployment documentation. The operational UI intentionally uses empty states until OAuth, source adapters, background workers, and live analytics queries are connected.
 
 The production build has been verified with `npm run build`.
 
@@ -22,7 +22,9 @@ Open `http://localhost:3000`. The local UI can render without credentials. API r
 
 | Route | Purpose |
 | --- | --- |
-| `/` | Product landing shell |
+| `/` | Product landing page and prototype entry point |
+| `/login` | Supabase email sign-in and signup |
+| `/auth/callback` | Email confirmation/session callback |
 | `/dashboard` | Workspace overview and operational signals |
 | `/workspaces` | Brand workspace management UI |
 | `/sources` | Meta, Google Business, and Reddit source setup UI |

@@ -8,7 +8,7 @@ The product language is English by default with Arabic support and RTL layout sw
 
 ## 2. Current delivery state
 
-The repository is a buildable Next.js App Router application. Delivered screens are the landing shell, Dashboard, Workspaces, Sources, Sync Center, and Analytics. Delivered server routes are the provider webhook intake route and the background sync enqueue route. Supabase contains the foundation schema plus the sync automation tables and onboarding RPC. Workspaces and source records now read and write through the browser Supabase client under Auth/RLS. There is no production OAuth connection, no real source credential in the repository, and no running worker yet.
+The repository is a buildable Next.js App Router prototype. Delivered screens are the product landing page, Supabase login/signup, Dashboard, Workspaces, Sources, Sync Center, and Analytics. Delivered server routes are the Auth callback, provider webhook intake route, and background sync enqueue route. Supabase contains the foundation schema plus the sync automation tables and onboarding RPC. Workspaces and source records now read and write through the browser Supabase client under Auth/RLS. There is no production OAuth connection, no real source credential in the repository, and no running worker yet.
 
 The current UI intentionally shows empty states because no organization, workspace, source, or mention data has been seeded. Do not add fake analytics data to make the dashboard appear populated; connect the data layer instead.
 
@@ -25,6 +25,9 @@ The current UI intentionally shows empty states because no organization, workspa
 ## 4. Important paths
 
 - `app/layout.tsx`: document metadata and root layout.
+- `app/page.tsx`: public product landing page with prototype CTAs.
+- `app/login/page.tsx`: Supabase email sign-in/signup UI.
+- `app/auth/callback/route.ts`: PKCE/email confirmation session exchange.
 - `app/globals.css`: shared visual system and responsive styles.
 - `components/app-shell.tsx`: sidebar, workspace switcher placeholder, language toggle, and navigation.
 - `app/dashboard/page.tsx`: overview metrics and operational empty states.
