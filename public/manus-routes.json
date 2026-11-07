@@ -1,1 +1,1 @@
-{"routes":[{"path":"/","title":"Sensor Brand AI"},{"path":"/dashboard","title":"Dashboard"},{"path":"/workspaces","title":"Workspaces"}]}
+{"routes":[{"path":"/","title":"Sensor Brand AI"},{"path":"/dashboard","title":"Dashboard"},{"path":"/workspaces","title":"Workspaces"},{"path":"/sources","title":"Sources"}]}

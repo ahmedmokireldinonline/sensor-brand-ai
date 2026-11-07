@@ -7,6 +7,7 @@ import { useState } from "react";
 const navigation = [
   { href: "/dashboard", label: "Overview", arabic: "نظرة عامة", icon: "◌" },
   { href: "/workspaces", label: "Workspaces", arabic: "مساحات العمل", icon: "▦" },
+  { href: "/sources", label: "Sources", arabic: "المصادر", icon: "⌁" },
 ];
 
 export function AppShell({ children }: { children: React.ReactNode }) {
