@@ -282,3 +282,39 @@ body { background: #f4f8f6; color: var(--ink); font-family: Inter, ui-sans-serif
 @media (max-width: 1100px) { .advanced-metric-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }.customize-panel { align-items: flex-start; flex-direction: column; }.metric-picker { justify-content: flex-start; max-width: none; } }
 @media (max-width: 980px) { .dashboard-control-bar { align-items: stretch; flex-direction: column; gap: 12px; }.control-actions { justify-content: space-between; }.advanced-insights-grid { grid-template-columns: 1fr; } }
 @media (max-width: 720px) { .advanced-metric-grid { grid-template-columns: 1fr; }.control-group { align-items: stretch; flex-direction: column; }.control-group label, .control-group select { width: 100%; }.control-actions { align-items: stretch; flex-direction: column; }.compare-toggle { justify-content: space-between; }.customize-panel { padding: 17px; }.metric-picker-item { flex: 1; justify-content: center; min-width: 135px; }.advanced-dashboard-header .header-status { align-items: flex-start; flex-wrap: wrap; }.header-updated { display: block; margin-inline-start: 0; width: 100%; }.channel-health-panel { min-height: 0; } }
+
+/* Global UX hardening: predictable focus, touch targets, and mobile-first overflow. */
+:focus-visible { outline: 3px solid rgba(8,127,115,.38); outline-offset: 3px; }
+.sr-only { border: 0; clip: rect(0 0 0 0); clip-path: inset(50%); height: 1px; margin: -1px; overflow: hidden; padding: 0; position: absolute; white-space: nowrap; width: 1px; }
+html { scroll-behavior: smooth; }
+body { overflow-x: hidden; }
+button, a, select, input, textarea { min-height: 36px; }
+.app-shell[dir="rtl"] .sidebar { text-align: right; }
+.app-shell[dir="rtl"] .nav-link.active { box-shadow: inset -2px 0 var(--signal); }
+.app-shell[dir="rtl"] .workspace-summary > div:not(.summary-help), .app-shell[dir="rtl"] .source-summary > div:not(.source-summary-note) { border-right: 0; border-left: 1px solid var(--line); }
+.app-shell[dir="rtl"] .workspace-summary > div:last-of-type, .app-shell[dir="rtl"] .source-summary > div:last-of-type { border-left: 0; }
+
+@media (max-width: 720px) {
+  .sidebar { width: min(320px, 88vw); padding: 20px 16px 18px; }
+  .sidebar-brand-row { align-items: center; }
+  .sidebar .primary-nav { display: block; }
+  .sidebar .workspace-switcher { display: block; }
+  .sidebar .sidebar-bottom { margin-top: auto; }
+  .mobile-menu-button { align-items: center; border: 1px solid #d7e3de; border-radius: 9px; display: inline-flex; height: 40px; justify-content: center; width: 40px; }
+  .topbar-icon-button { align-items: center; display: inline-flex; height: 40px; justify-content: center; width: 40px; }
+  .topbar-actions { gap: 4px; }
+  .topbar-breadcrumb { min-width: 0; overflow: hidden; }
+  .topbar-breadcrumb strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .page-header h1 { max-width: 100%; }
+  .page-intro { font-size: 13px; }
+  .panel-heading { align-items: flex-start; flex-wrap: wrap; }
+  .metric-card-modern { min-height: 142px; }
+  .workspace-summary, .source-summary { padding: 17px; }
+  .workspace-summary > div:not(.summary-help), .source-summary > div:not(.source-summary-note) { border-bottom: 1px solid var(--line); border-inline-end: 0; padding-bottom: 10px; }
+  .workspace-summary > div:nth-child(3), .source-summary > div:nth-child(3) { border-bottom: 0; }
+  .form-actions { flex-wrap: wrap; }
+  .form-actions .button { min-width: 130px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .001ms !important; }
+}

@@ -28,3 +28,13 @@
 - [ ] Add Meta callback and Webhook route placeholders.
 - [ ] Add Google integration configuration placeholders.
 - [ ] Keep LinkedIn and Reddit adapters isolated from the normalized data model.
+
+## Product experience and discoverability
+
+- [x] Make the application shell usable on mobile with an off-canvas navigation, explicit close/open states, keyboard focus styles, touch-sized controls, and RTL-aware placement.
+- [x] Improve bilingual behavior by respecting a saved language, falling back to the browser language, updating `lang` and `dir`, and exposing accessible language choices.
+- [x] Add first-party attribution capture for landing path, referrer, UTM parameters, Google click ID, and Meta click ID without putting secrets in the browser.
+- [x] Add a server endpoint for allow-listed page-view and interaction events, with authenticated routes excluded from indexing.
+- [x] Add canonical metadata, Open Graph/Twitter metadata, robots rules, sitemap output, and a skill registry that maps external references to safe product locations.
+- [ ] Replace console-only event ingestion with a workspace-scoped analytics table and retention policy after the production data model is approved.
+- [ ] Add provider-owned OAuth callbacks and verified API clients for Google Business Profile, Meta, and Reddit.
