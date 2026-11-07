@@ -8,6 +8,7 @@ const navigation = [
   { href: "/dashboard", label: "Overview", arabic: "نظرة عامة", icon: "◌" },
   { href: "/workspaces", label: "Workspaces", arabic: "مساحات العمل", icon: "▦" },
   { href: "/sources", label: "Sources", arabic: "المصادر", icon: "⌁" },
+  { href: "/sync", label: "Sync Center", arabic: "مركز المزامنة", icon: "↻" },
 ];
 
 export function AppShell({ children }: { children: React.ReactNode }) {
