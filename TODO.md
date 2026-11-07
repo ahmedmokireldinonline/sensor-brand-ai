@@ -24,7 +24,9 @@
 
 ## Integration preparation
 
-- [ ] Add provider connection interfaces.
+- [x] Add provider connection interfaces for Meta, Google Business, Reddit, LinkedIn, and Custom Webhook.
+- [x] Add a bilingual API settings workspace with masked credentials, local prototype persistence, connection test feedback, sync frequency, and callback URLs.
 - [ ] Add Meta callback and Webhook route placeholders.
 - [ ] Add Google integration configuration placeholders.
+- [x] Surface LinkedIn and Custom Webhook in the source connection UI and Sync Center.
 - [ ] Keep LinkedIn and Reddit adapters isolated from the normalized data model.

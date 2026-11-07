@@ -23,6 +23,8 @@ const navigation = [
   { href: "/sources", label: "Sources", arabic: "المصادر", icon: "⌁", group: "Workspace" },
   { href: "/sync", label: "Sync Center", arabic: "مركز المزامنة", icon: "↻", group: "Operations" },
   { href: "/analytics", label: "Analytics", arabic: "التحليلات", icon: "◒", group: "Operations" },
+  { href: "/settings/integrations", label: "API settings", arabic: "إعدادات API", icon: "⚙", group: "Operations" },
+  { href: "/resources", label: "Free tools", arabic: "أدوات مجانية", icon: "✦", group: "Operations" },
 ];
 
 export function AppShell({ children }: { children: React.ReactNode }) {

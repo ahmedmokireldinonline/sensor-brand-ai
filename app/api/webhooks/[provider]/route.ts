@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createHash } from "node:crypto";
 import { insertSupabaseRow } from "@/lib/supabase-admin";
 
-const supportedProviders = new Set(["meta", "google", "reddit"]);
+const supportedProviders = new Set(["meta", "google", "reddit", "linkedin", "custom"]);
 
 export async function GET(request: NextRequest, context: { params: Promise<{ provider: string }> }) {
   const { provider } = await context.params;
