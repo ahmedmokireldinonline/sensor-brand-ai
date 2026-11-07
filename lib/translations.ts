@@ -31,6 +31,7 @@ export const messages = {
     trigger: { en: "Trigger", ar: "المشغّل" },
     status: { en: "Status", ar: "الحالة" },
     records: { en: "Records", ar: "السجلات" },
+    supabaseNotConfigured: { en: "Supabase is not configured.", ar: "لم يتم إعداد Supabase." },
   },
   shell: {
     primaryNavigation: { en: "Primary navigation", ar: "التنقل الرئيسي" },
