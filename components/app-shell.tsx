@@ -9,6 +9,7 @@ const navigation = [
   { href: "/workspaces", label: "Workspaces", arabic: "مساحات العمل", icon: "▦" },
   { href: "/sources", label: "Sources", arabic: "المصادر", icon: "⌁" },
   { href: "/sync", label: "Sync Center", arabic: "مركز المزامنة", icon: "↻" },
+  { href: "/analytics", label: "Analytics", arabic: "التحليلات", icon: "◒" },
 ];
 
 export function AppShell({ children }: { children: React.ReactNode }) {
